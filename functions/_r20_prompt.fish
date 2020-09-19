@@ -159,7 +159,7 @@ end
 
 function _r20_git_is_dirty \
   --description 'Checks if a git repo has changes'
-  test (git status -s | wc -c) -ne 0
+  test (git status -s 2>/dev/null | wc -c) -ne 0
 end
 
 function _r20_git_root --description 'Print the git root'
