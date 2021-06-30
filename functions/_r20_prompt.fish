@@ -69,9 +69,9 @@ function _r20_color \
   else if test $token = 'branch'
     set_color brblack
   else if test $token = 'repo'
-    set_color -o bryellow
+    set_color -o brblue
   else if test $token = 'path'
-    set_color red
+    set_color magenta
   else if test $token = 'error'
     set_color red
   else if test $token = 'duration'
