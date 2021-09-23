@@ -41,14 +41,16 @@ function _r20_prompt --description 'Prompt' --argument-names side
     _r20_pwd "$gitroot"
     echo -n ' '
 
-    # Branch
-    _r20_color branch
-    echo -n (_r20_git_branch)' '
+    if test -z ''(git config --get fish-r20.skipPrompt || true)
+      # branch
+      _r20_color branch
+      echo -n (_r20_git_branch)' '
 
-    # status
-    _r20_color git_status
-    _r20_git_ahead_behind
-    _r20_prompt_git_symbols
+      # status
+      _r20_color git_status
+      _r20_git_ahead_behind
+      _r20_prompt_git_symbols
+    end
   else
     # just pwd
     _r20_color path
