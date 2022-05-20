@@ -1,14 +1,14 @@
 # Cheatsheet:
 #   _r20_prompt            # prints the entire prompt
 #
-#   _r20_color mute        # => (set_color brblack)
+#   _r20_color prompt      # => (set_color brblack)
 #   _r20_glyph end         # => ">"
 #
 #   _r20_git_ahead_behind  # => "+1 -1"
 #   _r20_git_branch        # => "master"
 #   _r20_git_is_dirty      # success or fail
 
-function _r20_prompt --description 'Prompt' --argument-names side
+function _r20_prompt --description 'Prompt' --argument-names side fast
   set -l exit_code $status
   set -l gitroot (_r20_git_root)
   set -l duration (_r20_format_time $CMD_DURATION 1)
@@ -41,24 +41,27 @@ function _r20_prompt --description 'Prompt' --argument-names side
     _r20_pwd "$gitroot"
     echo -n ' '
 
-    if test -z ''(git config --get fish-r20.skipPrompt || true)
-      # branch
-      _r20_color branch
-      echo -n (_r20_git_branch)' '
+    # branch
+    _r20_color branch
+    echo -n (_r20_git_branch)' '
 
-      # status
+    # status
+    if test "$fast" != "1" # bypass for placeholder
       _r20_color git_status
       _r20_git_ahead_behind
       _r20_prompt_git_symbols
     end
   else
-    # just pwd
     _r20_color path
     echo -n (prompt_pwd)' '
   end
 
   # end
-  _r20_prompt_end
+  if test "$fast" = "1"
+    _r20_prompt_end fastprompt
+  else
+    _r20_prompt_end prompt
+  end
 end
 
 function _r20_color \
@@ -66,8 +69,10 @@ function _r20_color \
   --argument-names token
   if test $token = 'git_status'
     set_color green
-  else if test $token = 'mute'
-    set_color brblack # separator and prompt end
+  else if test $token = 'prompt'
+    set_color brblack
+  else if test $token = 'fastprompt'
+    set_color brblack
   else if test $token = 'branch'
     set_color brblack
   else if test $token = 'repo'
@@ -173,6 +178,8 @@ function _r20_glyph \
   --argument-names token
   if test $token = 'prompt'
     echo -n '›'
+  else if test $token = 'fastprompt'
+    echo -n '›'
   else if test $token = 'right_end'
     echo -n '‹'
   else if test $token = 'separator'
@@ -195,13 +202,13 @@ function _r20_prompt_git_symbols --description 'Git status prefix'
 end
 
 function _r20_prompt_right_end
-  echo -n (_r20_color mute)
+  echo -n (_r20_color prompt)
   echo -n (_r20_glyph right_end)' '
 end
 
-function _r20_prompt_end
-  echo -n (_r20_color mute)
-  echo -n (_r20_glyph prompt)' '(set_color reset)
+function _r20_prompt_end --argument-names style
+  echo -n (_r20_color $style)
+  echo -n (_r20_glyph $style)' '(set_color reset)
 end
 
 function _r20_pwd \

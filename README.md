@@ -17,8 +17,10 @@ Simple fish prompt
 Requires [fish shell](https://fishshell.com/) 3.1. The recommended way to install is with [Fisher](https://github.com/jorgebucaran/fisher).
 
 ```sh
-fisher add rstacruz/fish-theme-r20
+fisher install rstacruz/fish-theme-r20
 ```
+
+Optional: also install [fish-async-prompt](https://github.com/acomagu/fish-async-prompt) if the prompt is slow (eg, accessing Git repos on network volumes).
 
 ## More screenshots
 
