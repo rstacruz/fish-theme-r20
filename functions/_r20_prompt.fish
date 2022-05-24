@@ -214,7 +214,7 @@ end
 function _r20_pwd \
   --description 'Prints pwd based on Git root' \
   --argument-names gitroot
-  set -l gitsubdir (pwd | sed -e "s|^$gitroot||")
+  set -l gitsubdir (pwd | sed -e "s|^$gitroot||i")
 
   set -l prefix (
     _r20_color repo
